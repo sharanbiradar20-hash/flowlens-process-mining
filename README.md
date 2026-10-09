@@ -1,50 +1,89 @@
-# FlowLens: IT Incident Process Mining & Optimization
+<div align="center">
+  <h1>🔍 FlowLens: IT Incident Process Mining</h1>
+  <p><i>Uncovering hidden bottlenecks and operational inefficiencies in IT Service Management.</i></p>
+  
+  <img src="https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python" />
+  <img src="https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=streamlit" />
+  <img src="https://img.shields.io/badge/Data_Analysis-Pandas-150458?style=for-the-badge&logo=pandas" />
+</div>
 
-## 📖 Executive Summary
-**FlowLens** is an advanced operational intelligence project that uses **Process Mining** to reconstruct and analyze IT Service Management (ITSM) workflows from raw event logs. By analyzing **114,807 real-world incident events**, this project shifts the focus from simple static reporting to dynamic, sequence-based bottleneck identification.
+<br>
 
-The goal of this project is to identify where time is wasted, track SLA compliance, and visually map out the inefficiencies in ticket routing (e.g., the "Ping-Pong" effect).
+## 📌 Project Overview
+In large organizations, IT tickets often get stuck in endless loops of reassignments, costing time and money. **FlowLens** is a Data Analytics project that uses **Process Mining (PM4Py)** to analyze **114,807 real-world IT incidents** and visualize exactly where the workflow breaks down.
 
-## 🚀 Key Business Findings & KPIs
-Using PM4Py and data analytics, we uncovered the following insights from the data:
-- **Mean Time to Resolution (MTTR):** Calculated median and 90th percentile resolution times across all support teams, highlighting outliers that took >500 hours to resolve.
-- **SLA Breach Tracking:** Identified tickets that breached the standard 72-hour Service Level Agreement, allowing for deep-dive root cause analysis.
-- **The "Ping-Pong" Effect:** Quantified internal inefficiency by tracking tickets that were repeatedly flagged as `reassigned-misrouted`. We found a significant subset of tickets experiencing up to 10+ reassignments before resolution.
-- **Performance Bottleneck Maps:** Used Directly Follows Graphs (DFG) to visualize exactly where tickets stall (e.g., waiting on third-party vendors or complex internal analysis).
+Instead of just looking at standard metrics, this project reconstructs the *actual* paths tickets take, exposing SLA breaches and hidden operational bottlenecks.
 
-## 🛠 Tech Stack
-- **Python 3.11**
-- **Data Engineering:** `Pandas`, `NumPy`
-- **Process Mining Engine:** `PM4Py`
-- **Visualization:** `Streamlit`, `Seaborn`, `Matplotlib`, `Graphviz`
+---
 
-## 📁 Repository Structure
+## 🎯 Business Value & Key Insights
+By applying process mining techniques, this project uncovered three major operational insights:
+
+1. **The "Ping-Pong" Effect:** A significant volume of tickets bounce back and forth between teams (`reassigned-misrouted`). We visualized this inefficiency and quantified the exact delay it causes.
+2. **SLA Breach Tracking:** Analyzed the **Mean Time to Resolution (MTTR)** and identified the specific pathways that caused tickets to breach the standard 72-hour Service Level Agreement.
+3. **Bottleneck Discovery:** Generated Directed Follows Graphs (DFG) to map the flow of tickets. This visually highlights the specific states (e.g., *Pending Vendor*) that act as massive roadblocks in the resolution pipeline.
+
+---
+
+## 📊 Visualizing the Data
+
+### 1. Operational Dashboard
+We built an interactive **Streamlit Dashboard** that allows stakeholders to filter tickets by reassignment counts and instantly view the resulting SLA impact.
+*(Run `streamlit run dashboard/app.py` to view)*
+
+### 2. Process Flow Bottlenecks
+Using PM4Py, we generated a **Performance DFG (Directly Follows Graph)**. The red paths indicate the longest delays between IT statuses.
+
+![Performance DFG](figures/04_performance_dfg.png)
+
+### 3. Resolution Time Distribution
+Analyzing the MTTR reveals a heavy right-skew, showing that while most tickets resolve quickly, a problematic subset gets stuck in the system for weeks.
+
+![MTTR Histogram](figures/01_mttr_histogram.png)
+
+---
+
+## 🛠️ Repository Structure
 ```text
-flowlens-process-mining/
-├── data/
-│   ├── raw/                 # Raw AnonymizedEventData.csv (114k rows)
-│   └── processed/           # Cleaned EventLog & Aggregated Ticket KPIs
-├── notebooks/
-│   ├── 01_data_cleaning_and_kpis.ipynb    # Data cleaning & SLA Breach analysis
-│   └── 02_process_discovery.ipynb         # PM4Py DFG maps & Conformance Checking
-├── src/                     
-│   └── data_preprocessing.py # Modular ETL pipeline script
-├── dashboard/
-│   └── app.py               # Streamlit interactive web dashboard
-└── requirements.txt         # Project dependencies
+📦 flowlens-process-mining
+ ┣ 📂 data
+ ┃ ┗ 📂 processed          # Cleaned CSV logs and aggregated ticket KPIs
+ ┣ 📂 notebooks
+ ┃ ┣ 📜 01_data_cleaning_and_kpis.ipynb    # Data cleaning & SLA analysis
+ ┃ ┗ 📜 02_process_discovery.ipynb         # PM4Py bottleneck mappings
+ ┣ 📂 src
+ ┃ ┣ 📜 data_preprocessing.py              # Automated data cleaning pipeline
+ ┃ ┗ 📜 export_figures.py                  # Script to generate visualizations
+ ┣ 📂 dashboard
+ ┃ ┗ 📜 app.py                             # Interactive Streamlit Web App
+ ┣ 📂 figures                              # Exported PNG charts and PM4Py graphs
+ ┗ 📜 requirements.txt                     # Project dependencies
 ```
 
-## 📊 Running the Interactive Dashboard
-To launch the interactive Streamlit dashboard locally:
-1. Ensure your virtual environment is activated: `.\venv\Scripts\Activate.ps1`
-2. Run the Streamlit app:
-```powershell
+---
+
+## 🚀 How to Run Locally
+
+**1. Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+**2. Generate the Visualizations (Optional)**
+```bash
+python src/export_figures.py
+```
+
+**3. Launch the Dashboard**
+```bash
 streamlit run dashboard/app.py
 ```
 
+---
+
 ## 💼 Resume Bullet Points (STAR Format)
-*If you are using this project for applications, feel free to use these bullet points:*
-> - **IT Incident Process Mining & Operational Intelligence** | *Python, PM4Py, Streamlit, Pandas*
-> - Engineered an end-to-end incident analysis pipeline processing **114,000+ event logs**, deriving key ITIL metrics including MTTR, first-response time, and SLA breach rates.
-> - Discovered and quantified ticket reassignment loops (*ping-pong effect*) causing multi-day delays by applying PM4Py Directly Follows Graphs (DFG) to reconstruct actual vs. ideal process flows.
-> - Built and deployed an interactive **Streamlit dashboard** enabling stakeholders to filter performance bottlenecks by support team and visually track revenue-at-risk due to delayed resolutions.
+If you are reviewing this project for a Data Analyst or Data Science position, here is a summary of the technical achievements:
+
+> - **IT Incident Process Mining:** Engineered a Python-based ETL pipeline processing **114,000+ IT service logs**, calculating critical KPIs like Mean Time to Resolution (MTTR) and SLA breach rates.
+> - **Bottleneck Discovery:** Applied **PM4Py** to generate Directly Follows Graphs (DFGs), successfully identifying hidden reassignment loops (*ping-pong effect*) that caused significant multi-day resolution delays.
+> - **Interactive Dashboarding:** Developed and deployed a dynamic **Streamlit** dashboard, enabling stakeholders to filter workflow bottlenecks interactively and visualize operational inefficiencies.
